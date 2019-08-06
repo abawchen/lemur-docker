@@ -16,21 +16,32 @@ FROM ubuntu:18.04
 LABEL maintainer="Netflix Open Source Development <talent@netflix.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && \
-apt-get install -y software-properties-common && \
-add-apt-repository ppa:deadsnakes/ppa -y && \
-  apt-get update && \
-  apt-get install -y curl git build-essential sudo \
-    python3.6 python3-pip python3.6-dev \
-    nodejs npm \
-    postgresql postgresql-contrib \
-    libpq-dev libssl-dev libffi-dev libsasl2-dev libldap2-dev && \
-  ln -sf /usr/bin/python3.6 /usr/local/bin/python3 && \
-  update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
-  update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 && \
-  update-alternatives --install /usr/bin/node node /usr/bin/nodejs 1 && \
-  apt-get clean -y && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	apt-get install -y nodejs-dev node-gyp libssl1.0-dev
+
+RUN apt-get install -y npm
+
+RUN apt-get update && \
+	apt-get install -y software-properties-common && \
+	add-apt-repository ppa:deadsnakes/ppa -y && \
+	apt-get update && \
+	apt-get install -y curl git build-essential sudo \
+    python3.6 python3-pip python3.6-dev
+
+RUN apt-get install -y \
+	postgresql postgresql-contrib \
+    libpq-dev libssl-dev libffi-dev libsasl2-dev libldap2-dev
+
+RUN apt-get install -y \
+	nodejs npm
+
+RUN ln -sf /usr/bin/python3.6 /usr/local/bin/python3 && \
+	update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
+	update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 && \
+	update-alternatives --install /usr/bin/node node /usr/bin/nodejs 1 && \
+	apt-get clean -y && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN locale-gen en_US.UTF-8
 
